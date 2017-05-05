@@ -8,5 +8,4 @@
 #include <logic/IQDIMACSParserFactory.hpp>
 #include <logic/IQDIMACSParser.hpp>
 #include <logic/parser.hpp>
-#include <logic/parsers>
 #include <logic/Variable.hpp>
