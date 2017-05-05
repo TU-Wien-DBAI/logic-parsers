@@ -1,5 +1,5 @@
 %{
-#include "../preamble.hpp"
+#include "../preamble.h"
 #include "QDIMACSBisonParser.hpp"
 #include "QDIMACSLexer.hpp"
 

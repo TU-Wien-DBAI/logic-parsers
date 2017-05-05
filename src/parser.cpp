@@ -38,10 +38,10 @@ namespace logic
 		qbfInstanceFactory_ = factory;
 	}
 
-	IQDIMACSParser *parser::qbfParser()
+	IQDIMACSParser *parser::qdimacsParser()
 	{
-		if(qbfParserFactory_)
-			return qbfParserFactory_->create();
+		if(qdimacsParserFactory_)
+			return qdimacsParserFactory_->create();
 		return new QDIMACSParser();
 	}
 	

@@ -6,7 +6,6 @@
 namespace logic
 {
 	using std::vector;
-	using std::unordered_map;
 
 	QbfClause::QbfClause(const IQbfInstance &instance) : instance_(instance) { }
 

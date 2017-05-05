@@ -12,7 +12,7 @@ namespace logic
 #include "position.hh"
 #include "location.hh"
 
-#include <logic/create.hpp>
+#include <logic/parser.hpp>
 
 #include "QDIMACSBisonParser.hh"
 

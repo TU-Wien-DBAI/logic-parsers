@@ -1,7 +1,7 @@
 #include "../preamble.h"
 #include "QbfInstance.hpp"
 
-#include <logic/create.hpp>
+#include <logic/parser.hpp>
 
 #include <stdexcept>
 
@@ -10,7 +10,6 @@ namespace logic
 	using std::unordered_map;
 	using std::unordered_set;
 	using std::vector;
-	using std::unique_ptr;
 
 	using std::invalid_argument;
 	using std::logic_error;
@@ -67,20 +66,20 @@ namespace logic
 
 	IQbfClause &QbfInstance::newClause()
 	{
-		IQbfClause *clause = create::clause(*this);
+		IQbfClause *clause = parser::qbfClause(*this);
 		clauses_.push_back(clause);
 		return *clause;
 	}
 
 	bool QbfInstance::isClause(id_t id) const
 	{
-		return vertex > variableCount_
-			&& vertex <= variableCount_ + clauses_.size();
+		return id > variableCount_
+			&& id <= variableCount_ + clauses_.size();
 	}
 
 	bool QbfInstance::isVariable(id_t id) const
 	{
-		return vertex <= variableCount_;
+		return id <= variableCount_;
 	}
 
 	bool QbfInstance::isExistential(variable_t variable) const

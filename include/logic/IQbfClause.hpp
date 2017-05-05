@@ -3,7 +3,7 @@
 
 #include <logic/global>
 
-#include <logic/QbfVariable.hpp>
+#include <logic/Variable.hpp>
 
 #include <logic/helpers>
 
