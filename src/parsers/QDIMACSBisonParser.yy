@@ -12,8 +12,8 @@
 
 /* define some parser name settings */
 %define parser_class_name {QDIMACSBisonParser}
-%define api.namespace {qbf2asp}
-%define api.prefix {qbf2asp}
+%define api.namespace {logic}
+%define api.prefix {logic}
 %file-prefix "QDIMACSBison"
 
 /* turn on error reporting (we need to define the 'error' function) */
@@ -23,10 +23,7 @@
  * we need to include the relevant hand-written header files */
 %code top
 {
-	#ifdef HAVE_CONFIG_H
-		#include <config.h>
-	#endif
-
+	#include "../preamble.h"
 	#include "QDIMACSBisonParser.hpp"
 	#include "QDIMACSLexer.hpp"
 }
@@ -39,7 +36,7 @@
 	#include <vector>
 	#include <cstdint>
 
-	namespace qbf2asp
+	namespace logic
 	{
 		typedef std::int32_t num_t;
 		typedef std::vector<std::int32_t> num_vector;
@@ -51,8 +48,8 @@
 %union
 {
 	std::string *string;
-	qbf2asp::num_t number;
-	qbf2asp::num_vector *numberlist;
+	logic::num_t number;
+	logic::num_vector *numberlist;
 	IQbfClause *clause;
 }
 
@@ -68,12 +65,12 @@
  * before the generated parser source code */
 %code
 {
-	// define that the our lexer function (called 'qbf2asplex' by bison,
+	// define that the our lexer function (called 'logiclex' by bison,
 	// as per our api.prefix) is provided by the 'lex' function of the lexer
-	#define qbf2asplex lexer.lex
+	#define logiclex lexer.lex
 
 	// define auxilliary global variables in an anonymous namespace
-	namespace qbf2asp
+	namespace logic
 	{
 		namespace
 		{ 
@@ -303,7 +300,7 @@ literal  :  variable
 
 %% /* CODE TO PLACE AT THE END OF THE GENERATED SOURCE CODE FILE */
 
-namespace qbf2asp
+namespace logic
 {
 	void QDIMACSBisonParser::error(
 		const QDIMACSBisonParser::location_type &l,

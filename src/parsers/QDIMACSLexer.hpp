@@ -1,19 +1,19 @@
-#ifndef QBF2ASP_PARSERS_QDIMACSLEXER_H_
-#define QBF2ASP_PARSERS_QDIMACSLEXER_H_
+#ifndef LOGIC_PARSERS_QDIMACSLEXER_H_
+#define LOGIC_PARSERS_QDIMACSLEXER_H_
 
-#include <qbf2asp/global>
+#include <logic/global>
 
 #include "QDIMACSBisonParser.hpp"
 
-typedef qbf2asp::QDIMACSBisonParser::token token;
-typedef qbf2asp::QDIMACSBisonParser::token_type token_type;
-typedef qbf2asp::QDIMACSBisonParser::semantic_type semantic_type;
-typedef qbf2asp::QDIMACSBisonParser::location_type location_type;
+typedef logic::QDIMACSBisonParser::token token;
+typedef logic::QDIMACSBisonParser::token_type token_type;
+typedef logic::QDIMACSBisonParser::semantic_type semantic_type;
+typedef logic::QDIMACSBisonParser::location_type location_type;
 
 #ifndef YY_DECL
 #define YY_DECL						\
 	token_type						\
-	qbf2asp::QDIMACSLexer::lex(		\
+	logic::QDIMACSLexer::lex(		\
 		semantic_type *yylval,		\
 		location_type *yylloc		\
 	)
@@ -26,9 +26,9 @@ typedef qbf2asp::QDIMACSBisonParser::location_type location_type;
 #undef yyFlexLexer
 #endif // __FLEX_LEXER_H
 
-namespace qbf2asp
+namespace logic
 {
-	class QBF2ASP_LOCAL QDIMACSLexer : public QDIMACSFlexLexer
+	class LOGIC_LOCAL QDIMACSLexer : public QDIMACSFlexLexer
 	{
 	public:
 		QDIMACSLexer(std::istream *in = nullptr, std::ostream *out = nullptr);
@@ -40,6 +40,6 @@ namespace qbf2asp
 
 	}; // class QDIMACSLexer
 
-} // namespace qbf2asp
+} // namespace logic
 
-#endif /* QBF2ASP_PARSERS_QDIMACSLEXER_H_ */
+#endif /* LOGIC_PARSERS_QDIMACSLEXER_H_ */

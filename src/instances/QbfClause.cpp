@@ -1,13 +1,9 @@
-#ifdef HAVE_CONFIG_H
-	#include <config.h>
-#endif
-#include "../util/debug.hpp"
-
+#include "../preamble.h"
 #include "QbfClause.hpp"
 
-#include <qbf2asp/IQbfInstance.hpp>
+#include <logic/IQbfInstance.hpp>
 
-namespace qbf2asp
+namespace logic
 {
 	using std::vector;
 	using std::unordered_map;
@@ -86,4 +82,4 @@ namespace qbf2asp
 					variables_.end()));
 	}
 
-} // namespace qbf2asp
+} // namespace logic

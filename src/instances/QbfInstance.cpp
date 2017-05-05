@@ -1,19 +1,12 @@
-#ifdef HAVE_CONFIG_H
-	#include <config.h>
-#endif
-#include "../util/debug.hpp"
-
+#include "../preamble.h"
 #include "QbfInstance.hpp"
 
-#include <qbf2asp/create.hpp>
+#include <logic/create.hpp>
 
 #include <stdexcept>
 
-namespace qbf2asp
+namespace logic
 {
-	using htd::IHypergraph;
-	using htd::vertex_t;
-		
 	using std::unordered_map;
 	using std::unordered_set;
 	using std::vector;
@@ -79,21 +72,13 @@ namespace qbf2asp
 		return *clause;
 	}
 
-	IHypergraph *QbfInstance::toHypergraph() const
-	{
-		unique_ptr<IQbfToHypergraphConverter> converter(
-				create::hypergraphConverter());
-
-		return converter->convert(*this);
-	}
-
-	bool QbfInstance::isClause(vertex_t vertex) const
+	bool QbfInstance::isClause(id_t id) const
 	{
 		return vertex > variableCount_
 			&& vertex <= variableCount_ + clauses_.size();
 	}
 
-	bool QbfInstance::isVariable(vertex_t vertex) const
+	bool QbfInstance::isVariable(id_t id) const
 	{
 		return vertex <= variableCount_;
 	}
@@ -174,4 +159,4 @@ namespace qbf2asp
 		return IQbfInstance::const_iterator(new ConstEnum(clauses_.end()));
 	}
 
-}// namespace qbf2asp
+}// namespace logic

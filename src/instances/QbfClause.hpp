@@ -1,15 +1,15 @@
-#ifndef QBF2ASP_INSTANCES_QBFCLAUSE_H_
-#define QBF2ASP_INSTANCES_QBFCLAUSE_H_
+#ifndef LOGIC_INSTANCES_QBFCLAUSE_H_
+#define LOGIC_INSTANCES_QBFCLAUSE_H_
 
-#include <qbf2asp/global>
+#include <logic/global>
 
-#include <qbf2asp/IQbfClause.hpp>
+#include <logic/IQbfClause.hpp>
 
 #include <unordered_set>
 
-namespace qbf2asp
+namespace logic
 {
-	class QBF2ASP_LOCAL QbfClause : public IQbfClause
+	class LOGIC_LOCAL QbfClause : public IQbfClause
 	{
 	public:
 		QbfClause(const IQbfInstance &instance);
@@ -35,12 +35,12 @@ namespace qbf2asp
 		std::unordered_set<variable_t> variables_;
 		std::unordered_set<variable_t> negated_;
 
-		typedef sharp::ConstEnumerator<
+		typedef ConstEnumerator<
 			variable_t,
 			std::unordered_set<variable_t>::const_iterator> ConstEnum;
 
 	}; // class QbfClause
 
-} // namespace qbf2asp
+} // namespace logic
 
-#endif // QBF2ASP_INSTANCES_QBFCLAUSE_H_
+#endif // LOGIC_INSTANCES_QBFCLAUSE_H_

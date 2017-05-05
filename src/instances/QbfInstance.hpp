@@ -1,16 +1,16 @@
-#ifndef QBF2ASP_INSTANCES_QBFINSTANCE_H_
-#define QBF2ASP_INSTANCES_QBFINSTANCE_H_
+#ifndef LOGIC_INSTANCES_QBFINSTANCE_H_
+#define LOGIC_INSTANCES_QBFINSTANCE_H_
 
-#include <qbf2asp/global>
+#include <logic/global>
 
-#include <qbf2asp/IQbfInstance.hpp>
+#include <logic/IQbfInstance.hpp>
 
 #include <unordered_map>
 #include <vector>
 
-namespace qbf2asp
+namespace logic
 {
-	class QBF2ASP_LOCAL QbfInstance : public IQbfInstance
+	class LOGIC_LOCAL QbfInstance : public IQbfInstance
 	{
 	public:
 		QbfInstance();
@@ -26,10 +26,8 @@ namespace qbf2asp
 
 		virtual IQbfClause &newClause() override;
 
-		virtual htd::IHypergraph *toHypergraph() const override;
-
-		virtual bool isClause(htd::vertex_t vertex) const override;
-		virtual bool isVariable(htd::vertex_t vertex) const override;
+		virtual bool isClause(id_t id) const override;
+		virtual bool isVariable(id_t id) const override;
 		virtual bool isExistential(variable_t variable) const override;
 		virtual bool isUniversal(variable_t variable) const override;
 		virtual short quantifierLevel(variable_t variable) const override;
@@ -54,12 +52,12 @@ namespace qbf2asp
 		short outermostQuantifierLevel_;
 		std::vector<IQbfClause *> clauses_;
 
-		typedef sharp::ConstEnumerator<
+		typedef ConstEnumerator<
 			IQbfClause, 
 			std::vector<IQbfClause *>::const_iterator> ConstEnum;
 
 	}; // class QbfInstance
 
-} // namespace qbf2asp
+} // namespace logic
 
-#endif // QBF2ASP_INSTANCES_QBFINSTANCE_H_
+#endif // LOGIC_INSTANCES_QBFINSTANCE_H_

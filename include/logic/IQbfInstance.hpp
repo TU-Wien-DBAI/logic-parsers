@@ -3,8 +3,10 @@
 
 #include <logic/global>
 
-#include <logic/Clause.hpp>
+#include <logic/IInstance.hpp>
 #include <logic/IQbfClause.hpp>
+#include <logic/Id.hpp>
+#include <logic/Clause.hpp>
 
 #include <logic/helpers>
 
@@ -30,8 +32,8 @@ namespace logic
 		virtual void setQuantifierLevel(variable_t variable, short level) = 0;
 		virtual IQbfClause &newClause() = 0;
 
-		virtual bool isClause(htd::vertex_t vertex) const = 0;
-		virtual bool isVariable(htd::vertex_t vertex) const = 0;
+		virtual bool isClause(id_t id) const = 0;
+		virtual bool isVariable(id_t id) const = 0;
 		virtual bool isExistential(variable_t variable) const = 0;
 		virtual bool isUniversal(variable_t variable) const = 0;
 		virtual short quantifierLevel(variable_t variable) const = 0;

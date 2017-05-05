@@ -1,8 +1,5 @@
 %{
-#ifdef HAVE_CONFIG_H
-	#include <config.h>
-#endif
-
+#include "../preamble.hpp"
 #include "QDIMACSBisonParser.hpp"
 #include "QDIMACSLexer.hpp"
 
@@ -62,7 +59,7 @@ yylloc->step();
 {dnf}		{ return token::DNF; }
 
 {number}    {
-				yylval->number = static_cast<qbf2asp::num_t>(
+				yylval->number = static_cast<logic::num_t>(
 						std::stoul(yytext));
 				return token::NUMBER;
 			}
@@ -75,7 +72,7 @@ yylloc->step();
 				
 %%
 
-namespace qbf2asp
+namespace logic
 {
 	QDIMACSLexer::QDIMACSLexer(std::istream *in, std::ostream *out)
 		: QDIMACSFlexLexer(in, out)

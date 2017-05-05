@@ -37,74 +37,63 @@ BUILT_SOURCES =
 ############################
 
 # tell automake which libraries to build
-lib_LTLIBRARIES = libqbf2asp.la
+lib_LTLIBRARIES = liblogicparsers.la
 
 #----------------------------#
-# libqbf2asp.la build options #
+# liblogicparsers.la build options #
 #----------------------------#
 
 # list of generated header files
-LIBQBF2ASP_GENERATED_HEADER = \
+LIBLOGICPARSERS_GENERATED_HEADER = \
 	src/parsers/QDIMACSBisonParser.hh \
 	stack.hh \
 	position.hh \
 	location.hh
 
 # list of generated source files
-LIBQBF2ASP_GENERATED_SOURCE = \
+LIBLOGICPARSERS_GENERATED_SOURCE = \
 	src/parsers/QDIMACSBisonParser.cc \
 	src/parsers/QDIMACSLexer.cc
 
 # add those to the automake variable for generated files
-BUILT_SOURCES += $(LIBQBF2ASP_GENERATED_SOURCE)
+BUILT_SOURCES += $(LIBLOGICPARSERS_GENERATED_SOURCE)
 
 # tell automake to clean up the generated headers on 'make clean'
 # and to distribute the headers on 'make dist'
-CLEANFILES += $(LIBQBF2ASP_GENERATED_HEADER)
-EXTRA_DIST += $(LIBQBF2ASP_GENERATED_HEADER)
+CLEANFILES += $(LIBLOGICPARSERS_GENERATED_HEADER)
+EXTRA_DIST += $(LIBLOGICPARSERS_GENERATED_HEADER)
 
-# list the names of the public header files of the libqbf2asp.la library
-libqbf2asp_la_include_HEADERS = \
-	include/qbf2asp/main \
-	include/qbf2asp/global \
+# list the names of the public header files of the liblogicparsers.la library
+liblogicparsers_la_include_HEADERS = \
+	include/logic/parsers \
 	\
-	include/qbf2asp/IQbf2AspAlgorithmFactory.hpp \
-	include/qbf2asp/IQbf2AspAlgorithm.hpp \
-	include/qbf2asp/IQbf2AspTreeAlgorithmFactory.hpp \
-	include/qbf2asp/IQbf2AspTreeAlgorithm.hpp \
-	include/qbf2asp/IQbfClauseFactory.hpp \
-	include/qbf2asp/IQbfClause.hpp \
-	include/qbf2asp/IQbfInstanceFactory.hpp \
-	include/qbf2asp/IQbfInstance.hpp \
-	include/qbf2asp/IQbfToHypergraphConverterFactory.hpp \
-	include/qbf2asp/IQbfToHypergraphConverter.hpp \
-	include/qbf2asp/IQDIMACSParserFactory.hpp \
-	include/qbf2asp/IQDIMACSParser.hpp \
+	include/logic/IInstance.hpp \
+	include/logic/IParser.hpp \
+	include/logic/IQbfClauseFactory.hpp \
+	include/logic/IQbfClause.hpp \
+	include/logic/IQbfInstanceFactory.hpp \
+	include/logic/IQbfInstance.hpp \
+	include/logic/IQDIMACSParserFactory.hpp \
+	include/logic/IQDIMACSParser.hpp \
 	\
-	include/qbf2asp/create.hpp \
+	include/logic/parser.hpp \
 	\
-	include/qbf2asp/Variable.hpp \
-	include/qbf2asp/Clause.hpp 
+	include/logic/Clause.hpp \
+	include/logic/Variable.hpp
 
-# list all source code files for the libqbf2asp.la library
+# list all source code files for the liblogicparsers.la library
 # don't need to list the generated .cc files from bison and flex
 # since automake already knows about them, and adds them automatically
-libqbf2asp_la_SOURCES = \
+liblogicparsers_la_SOURCES = \
 	src/assembly.cpp \
+	src/preamble.h \
 	\
-	src/create.cpp \
-	\
-	src/algorithms/Qbf2DatalogTreeAlgorithm.cpp \
-	src/algorithms/Qbf2DatalogTreeAlgorithm.hpp \
-	src/algorithms/Qbf2DatalogTable.cpp \
-	src/algorithms/Qbf2DatalogTable.hpp \
+	src/parser.cpp \
 	\
 	src/instances/QbfInstance.cpp \
 	src/instances/QbfInstance.hpp \
 	src/instances/QbfClause.cpp \
 	src/instances/QbfClause.hpp \
-	src/instances/QbfToPrimalHypergraphConverter.cpp \
-	src/instances/QbfToPrimalHypergraphConverter.hpp \
 	\
 	src/parsers/QDIMACSBisonParser.hpp \
 	src/parsers/QDIMACSBisonParser.yy \
@@ -119,8 +108,8 @@ libqbf2asp_la_SOURCES = \
 	src/util/debug.hpp
 
 # tell automake that the installation directory for public header files of the
-# libqbf2asp.la library should be a subfolder in the default ${includedir}
-libqbf2asp_la_includedir = ${includedir}/qbf2asp
+# liblogicparsers.la library should be a subfolder in the default ${includedir}
+liblogicparsers_la_includedir = ${includedir}/logic
 
 # tell libtool to pass certain LDFLAGS to the compiler when building libsharp.la
 #
@@ -140,25 +129,7 @@ libqbf2asp_la_includedir = ${includedir}/qbf2asp
 #       0 if there is a backwards-compatibility breaking change, otherwise
 #       increase by 1 if CURRENT was increased by one.
 #
-libqbf2asp_la_LDFLAGS = -version-info 0:0:0
-
-############################
-# PROGRAMS TO BUILD:	   #
-############################
-
-# Link the main library (libqbf2asp.la) to all programs.
-LDADD = libqbf2asp.la
-
-# tell automake which programs to build
-bin_PROGRAMS = qbf2asp
-
-#----------------------#
-# qbf2asp build options #
-#----------------------#
-
-# list all source code files for the qbf2asp program
-qbf2asp_SOURCES = \
-	src/main.cpp
+liblogicparsers_la_LDFLAGS = -version-info 0:0:0
 
 ############################
 # DISTRIBUTION OPTIONS:	   #

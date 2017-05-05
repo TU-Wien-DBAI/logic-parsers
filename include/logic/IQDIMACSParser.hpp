@@ -8,7 +8,7 @@
 
 namespace logic
 {
-	class LOGIC_API IQDIMACSParser
+	class LOGIC_API IQDIMACSParser : public IParser
 	{
 	protected:
 		IQDIMACSParser &operator=(IQDIMACSParser &) { return *this; }

@@ -1,13 +1,13 @@
-#ifndef QBF2ASP_PARSERS_QDIMACSPARSER_H_
-#define QBF2ASP_PARSERS_QDIMACSPARSER_H_
+#ifndef LOGIC_PARSERS_QDIMACSPARSER_H_
+#define LOGIC_PARSERS_QDIMACSPARSER_H_
 
-#include <qbf2asp/global>
+#include <logic/global>
 
-#include <qbf2asp/IQDIMACSParser.hpp>
+#include <logic/IQDIMACSParser.hpp>
 
-namespace qbf2asp
+namespace logic
 {
-	class QBF2ASP_LOCAL QDIMACSParser : public IQDIMACSParser
+	class LOGIC_LOCAL QDIMACSParser : public IQDIMACSParser
 	{
 	public:
 		QDIMACSParser();
@@ -20,6 +20,6 @@ namespace qbf2asp
 
 	}; // class QDIMACSParser
 
-} // namespace qbf2asp
+} // namespace logic
 
-#endif // QBF2ASP_PARSERS_QDIMACSPARSER_H_
+#endif // LOGIC_PARSERS_QDIMACSPARSER_H_
