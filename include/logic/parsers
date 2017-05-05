@@ -1,0 +1,12 @@
+#include <logic/Clause.hpp>
+#include <logic/IInstance.hpp>
+#include <logic/IParser.hpp>
+#include <logic/IQbfClauseFactory.hpp>
+#include <logic/IQbfClause.hpp>
+#include <logic/IQbfInstanceFactory.hpp>
+#include <logic/IQbfInstance.hpp>
+#include <logic/IQDIMACSParserFactory.hpp>
+#include <logic/IQDIMACSParser.hpp>
+#include <logic/parser.hpp>
+#include <logic/parsers>
+#include <logic/Variable.hpp>
