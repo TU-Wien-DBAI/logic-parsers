@@ -64,6 +64,12 @@ AC_DEFINE_UNQUOTED([LOGICPARSERS_EXPORTS], [1], [Define to 1 if the library is b
 # check that libraries are present on the system
 ################################################
 
+# check for logichelpers library
+#TODO: check for "none required" output of AC_SEARCH_LIBS
+AC_SEARCH_LIBS([logichelpers_version], [logichelpers],
+	        [LOGICHELPERS_LIBS=$ac_cv_search_logichelpers_version],
+	        [AC_MSG_FAILURE([liblogichelpers not found])])
+
 # check for pthread (needed for googletest)
 ACX_PTHREAD([], [AC_MSG_FAILURE([POSIX thread support not found])])
 
