@@ -8,7 +8,7 @@
 
 /* the constructor of the generated parser class takes these arguments
  * and stores them in equivalently named private member fields */
-%parse-param {QDIMACSLexer &lexer} {IQbfInstance &instance}
+%parse-param {QDIMACSLexer &lexer} {IQbfInstanceBuilder &builder}
 
 /* define some parser name settings */
 %define parser_class_name {QDIMACSBisonParser}
@@ -76,6 +76,7 @@
 		{ 
 			num_t clauseCount_ = 0;
 			num_t quantifierNesting_ = -1;
+			num_t variableCount_ = 0;
 			std::unordered_set<num_t> unseenVariables_(0);
 		}
 	}
@@ -153,35 +154,29 @@ comment  :  COMMENT EOL
 
 cnf      :	PROBLEM CNF varcount clausecnt EOL
 		    {
-				instance.setCnf();
-				instance.setVariableCount($3);
+				builder.setCnf();
+				builder.setVariableCount($3);
 
+				variableCount_ = $3;
 				clauseCount_ = $4;
-				unseenVariables_.reserve(instance.variableCount());
+				unseenVariables_.reserve(variableCount_);
 
-				for(num_t var = 1;
-				    var <= (num_t)instance.variableCount();
-					++var)
-				{
+				for(num_t var = 1; var <= variableCount_; ++var)
 					unseenVariables_.insert(var);
-				}
 			}
 		 ;
 
 dnf		 :	PROBLEM DNF varcount clausecnt EOL
 		    {
-				instance.setDnf();
-				instance.setVariableCount($3);
+				builder.setDnf();
+				builder.setVariableCount($3);
 
+				variableCount_ = $3;
 				clauseCount_ = $4;
-				unseenVariables_.reserve(instance.variableCount());
+				unseenVariables_.reserve(variableCount_);
 
-				for(num_t var = 1;
-				    var <= (num_t)instance.variableCount();
-					++var)
-				{
+				for(num_t var = 1; var <= variableCount_; ++var)
 					unseenVariables_.insert(var);
-				}
 			}
 	     ;
 
@@ -220,7 +215,7 @@ exists   :  EXISTS qvars ZERO EOL
 				++quantifierNesting_;
 			
 				for(auto variable : *$2)
-					instance.setQuantifierLevel(variable, quantifierNesting_);
+					builder.setQuantifierLevel(variable, quantifierNesting_);
 				delete $2;
 			}
 		 ;
@@ -230,7 +225,7 @@ forall   :  FORALL qvars ZERO EOL
 				++quantifierNesting_;
 			
 				for(auto variable : *$2)
-					instance.setQuantifierLevel(variable, quantifierNesting_);
+					builder.setQuantifierLevel(variable, quantifierNesting_);
 				delete $2;
 			}
 		 ;
@@ -248,7 +243,7 @@ qvars    :  qvars variable
 
 variable :  NUMBER
 		 	{
-				if($1 > (num_t)instance.variableCount())
+				if($1 > variableCount_)
 				{
 					error(yyla.location, "variable out of bounds");
 					YYERROR;
@@ -263,7 +258,7 @@ clauses  :  clause clauses	{ --clauseCount_; }
 
 clause   :  literals ZERO EOL
 		 	{
-				$$ = &instance.newClause();
+				$$ = &builder.addClause();
 
 				for(auto literal : *$1)
 					if(literal < 0)

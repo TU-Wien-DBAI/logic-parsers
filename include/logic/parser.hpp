@@ -22,9 +22,9 @@ namespace logic
 
 		static IQDIMACSParser *qdimacsParser();
 
-		static IQbfInstance *qbfInstance();
+		static IQbfInstanceBuilder *qbfInstanceBuilder();
 		
-		static IQbfClause *qbfClause(const IQbfInstance &instance);
+		static IQbfClause *qbfClause();
 		
 	private:
 		parser();

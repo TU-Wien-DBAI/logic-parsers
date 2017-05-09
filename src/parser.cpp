@@ -45,14 +45,14 @@ namespace logic
 		return new QDIMACSParser();
 	}
 	
-	IQbfClause *parser::qbfClause(const IQbfInstance &instance)
+	IQbfClause *parser::qbfClause()
 	{
 		if(qbfClauseFactory_)
-			return qbfClauseFactory_->create(instance);
-		return new QbfClause(instance);
+			return qbfClauseFactory_->create();
+		return new QbfClause();
 	}
 
-	IQbfInstance *parser::qbfInstance()
+	IQbfInstanceBuilder *parser::qbfInstanceBuilder()
 	{
 		if(qbfInstanceFactory_)
 			return qbfInstanceFactory_->create();

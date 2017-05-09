@@ -25,19 +25,12 @@ namespace logic
 
 		virtual ~IQbfInstance() = 0;
 
-		virtual void setCnf() = 0;
-		virtual void setDnf() = 0;
-		virtual void setVariableCount(variable_t variableCount) = 0;
-
-		virtual void setQuantifierLevel(variable_t variable, short level) = 0;
-		virtual IQbfClause &newClause() = 0;
-
 		virtual bool isClause(id_t id) const = 0;
 		virtual bool isVariable(id_t id) const = 0;
 		virtual bool isExistential(variable_t variable) const = 0;
 		virtual bool isUniversal(variable_t variable) const = 0;
 		virtual short quantifierLevel(variable_t variable) const = 0;
-		virtual short outermostQuantifierLevel() const = 0;
+		virtual short innermostQuantifierLevel() const = 0;
 		virtual const std::unordered_set<variable_t> &variables(
 				short level) const = 0;
 		virtual variable_t variableCount() const = 0;

@@ -21,6 +21,7 @@ namespace logic
 
 		virtual ~IQbfClause() = 0;
 
+		virtual void setInstance(const IQbfInstance &instance) = 0;
 		virtual void addVariable(variable_t variable) = 0;
 		virtual void addVariable(variable_t variable, bool negated) = 0;
 

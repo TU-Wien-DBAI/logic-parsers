@@ -7,13 +7,16 @@ namespace logic
 {
 	using std::vector;
 
-	QbfClause::QbfClause(const IQbfInstance &instance) : instance_(instance) { }
-
 	QbfClause::~QbfClause() { }
+
+	void QbfClause::setInstance(const IQbfInstance &instance)
+	{
+		instance_ = &instance;
+	}
 
 	void QbfClause::addVariable(variable_t variable)
 	{
-		this->addVariable(variable, false);
+		addVariable(variable, false);
 	}
 
 	void QbfClause::addVariable(variable_t variable, bool negated)
@@ -25,7 +28,7 @@ namespace logic
 
 	const IQbfInstance &QbfClause::instance() const
 	{
-		return instance_;
+		return *instance_;
 	}
 
 	bool QbfClause::contains(variable_t variable) const
@@ -42,7 +45,7 @@ namespace logic
 			const variable_vector &trueVariables,
 			const variable_vector &falseVariables) const
 	{
-		if(instance_.isCnf())
+		if(instance_->isCnf())
 		{
 			for(const variable_t variable : falseVariables)
 				if(isNegated(variable))

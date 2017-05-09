@@ -14,27 +14,35 @@ namespace logic
 	using std::invalid_argument;
 	using std::logic_error;
 
-	QbfInstance::QbfInstance() { }
-
 	QbfInstance::~QbfInstance()
 	{
 		for(IQbfClause *clause : clauses_)
 			delete clause;
 	}
 
+	IQbfInstance *QbfInstance::toInstance()
+	{
+		completeConstruction();
+		return this;
+	}
+
 	void QbfInstance::setCnf()
 	{
+		throwIfCompleted();
 		dnf_ = false;
 	}
 
 	void QbfInstance::setDnf()
 	{
+		throwIfCompleted();
 		dnf_ = true;
 	}
 
 	void QbfInstance::setVariableCount(variable_t variableCount)
 	{
-		if(clauses_.size())
+		throwIfCompleted();
+
+		if(clauses_.size() > 0)
 			throw logic_error("Instance already has clauses.");
 
 		unquantified_.clear();
@@ -49,6 +57,8 @@ namespace logic
 
 	void QbfInstance::setQuantifierLevel(variable_t variable, short level)
 	{
+		throwIfCompleted();
+
 		if(variable > variableCount_)
 			throw invalid_argument("Argument 'variable' is not a variable.");
 		if(unquantified_.find(variable) == unquantified_.end())
@@ -57,16 +67,15 @@ namespace logic
 			throw invalid_argument("Argument 'level' cannot be negative.");
 
 		unquantified_.erase(variable);
-		quantifierLevels_[variable] = level;
-		variables_[level].insert(variable);
-
-		if(outermostQuantifierLevel_ < level)
-			outermostQuantifierLevel_ = level;
+		setQuantifierLevelInternal(variable, level);
 	}
 
-	IQbfClause &QbfInstance::newClause()
+	IQbfClause &QbfInstance::addClause()
 	{
-		IQbfClause *clause = parser::qbfClause(*this);
+		throwIfCompleted();
+
+		IQbfClause *clause = parser::qbfClause();
+		clause->setInstance(*this);
 		clauses_.push_back(clause);
 		return *clause;
 	}
@@ -86,41 +95,43 @@ namespace logic
 	{
 		// if the quantifier level is even, and we are a cnf, return true
 		// if the quantifier level is odd, and we are a dnf, return true
-		return quantifierLevel(variable) % 2 ? !dnf_ : dnf_;
+		return quantifierLevel(variable) % 2 == 0 ? !dnf_ : dnf_;
 	}
 
 	bool QbfInstance::isUniversal(variable_t variable) const
 	{
 		// if the quantifier level is odd, and we are a cnf, return true
 		// if the quantifier level is even, and we are a dnf, return true
-		return quantifierLevel(variable) % 2 ? dnf_ : !dnf_;
+		return quantifierLevel(variable) % 2 == 0 ? dnf_ : !dnf_;
 	}
 
 	short QbfInstance::quantifierLevel(variable_t variable) const
 	{
-		unordered_map<variable_t, short>::const_iterator iter;
-		if((iter = quantifierLevels_.find(variable)) == quantifierLevels_.end())
+		auto it = quantifierLevels_.find(variable);
+		if(it == quantifierLevels_.end())
 		{
-			return outermostQuantifierLevel_ % 2 ?
-				outermostQuantifierLevel_ + 1 : outermostQuantifierLevel_;
+			return innermostQuantifierLevel();
 		}
-		return iter->second;
+		return it->second + quantifierLevelModifier_;
 	}
 
-	short QbfInstance::outermostQuantifierLevel() const
+	short QbfInstance::innermostQuantifierLevel() const
 	{
-		return quantifierLevels_.size() < variableCount_
-				&& outermostQuantifierLevel_ % 2 ?
-			outermostQuantifierLevel_ + 1 : outermostQuantifierLevel_;
+		return innermostQuantifierLevel_ + quantifierLevelModifier_;
 	}
 
 	const unordered_set<variable_t> &QbfInstance::variables(short level) const
 	{
-		if(level > outermostQuantifierLevel())
+		if(level > innermostQuantifierLevel())
 			throw invalid_argument("Argument 'level' is too high.");
 
-		return const_cast<unordered_map<short, unordered_set<variable_t> > &>(
-				variables_)[level];
+		level -= quantifierLevelModifier_;
+
+		auto it = variables_.find(level);
+		if(it == variables_.end())
+			throw logic_error("BUG: Instance incorrectly initialized.");
+
+		return it->second;
 	}
 
 	variable_t QbfInstance::variableCount() const
@@ -157,5 +168,54 @@ namespace logic
 	{
 		return IQbfInstance::const_iterator(new ConstEnum(clauses_.end()));
 	}
+
+	void QbfInstance::completeConstruction()
+	{
+		if(completed_) return;
+
+		// check if we have something to do
+		if(unquantified_.size() > 0)
+		{
+			short levelToSet;
+			// check if the outermost quantifier is of the corret form
+			// that is: exists for CNF, forall for DNF
+			if(innermostQuantifierLevel_ % 2 == 0)
+			{
+				// if yes, simply set level 0 for unquantified_
+				levelToSet = 0;
+				quantifierLevelModifier_ = 0;
+			}
+			else // we need to introduce a new outermost quantifier
+			{
+				// set level -1, and set a +1 modifier
+				levelToSet = -1;
+				quantifierLevelModifier_ = 1;
+			}
+
+			for(variable_t var : unquantified_)
+				setQuantifierLevelInternal(var, levelToSet);
+			unquantified_.clear();
+		}
+		
+		completed_ = true;
+	}
+
+	void QbfInstance::throwIfCompleted()
+	{
+		if(completed_)
+			throw logic_error("Instance completed, can not be modified.");
+	}
+
+	void QbfInstance::setQuantifierLevelInternal(
+			variable_t variable,
+			short level)
+	{
+		quantifierLevels_[variable] = level;
+		variables_[level].insert(variable);
+
+		if(innermostQuantifierLevel_ < level)
+			innermostQuantifierLevel_ = level;
+	}
+
 
 }// namespace logic

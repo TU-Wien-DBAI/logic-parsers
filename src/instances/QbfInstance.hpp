@@ -4,34 +4,35 @@
 #include <logic/global>
 
 #include <logic/IQbfInstance.hpp>
+#include <logic/IQbfInstanceBuilder.hpp>
 
 #include <unordered_map>
 #include <vector>
 
 namespace logic
 {
-	class LOGIC_LOCAL QbfInstance : public IQbfInstance
+	class LOGIC_LOCAL QbfInstance
+		: public IQbfInstance, public IQbfInstanceBuilder
 	{
 	public:
-		QbfInstance();
 		virtual ~QbfInstance();
 
-		virtual void setCnf() override;
-		virtual void setDnf() override;
-		virtual void setVariableCount(variable_t variableCount) override;
+		// Builder methods
+		IQbfInstance *toInstance() override;
 
-		virtual void setQuantifierLevel(
-				variable_t variable,
-				short level) override;
+		void setCnf() override;
+		void setDnf() override;
+		void setVariableCount(variable_t variableCount) override;
+		void setQuantifierLevel(variable_t variable, short level) override; 
+		IQbfClause &addClause() override;
 
-		virtual IQbfClause &newClause() override;
-
+		// Instance methods
 		virtual bool isClause(id_t id) const override;
 		virtual bool isVariable(id_t id) const override;
 		virtual bool isExistential(variable_t variable) const override;
 		virtual bool isUniversal(variable_t variable) const override;
 		virtual short quantifierLevel(variable_t variable) const override;
-		virtual short outermostQuantifierLevel() const override;
+		virtual short innermostQuantifierLevel() const override;
 		virtual const std::unordered_set<variable_t> &variables(
 				short level) const override;
 		virtual variable_t variableCount() const override;
@@ -43,13 +44,22 @@ namespace logic
 		virtual const_iterator begin() const override;
 		virtual const_iterator end() const override;
 
+	protected:
+		void completeConstruction();
+		void throwIfCompleted();
+
 	private:
+		void setQuantifierLevelInternal(variable_t variable, short level);
+
+	private:
+		bool completed_;
 		bool dnf_;
 		variable_t variableCount_;
 		std::unordered_map<variable_t, short> quantifierLevels_;
 		std::unordered_map<short, std::unordered_set<variable_t> > variables_;
 		std::unordered_set<variable_t> unquantified_;
-		short outermostQuantifierLevel_;
+		short innermostQuantifierLevel_;
+		short quantifierLevelModifier_;
 		std::vector<IQbfClause *> clauses_;
 
 		typedef ConstEnumerator<

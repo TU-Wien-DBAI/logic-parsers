@@ -12,9 +12,9 @@ namespace logic
 	class LOGIC_LOCAL QbfClause : public IQbfClause
 	{
 	public:
-		QbfClause(const IQbfInstance &instance);
 		virtual ~QbfClause();
 
+		virtual void setInstance(const IQbfInstance &instance) override;
 		virtual void addVariable(variable_t variable) override;
 		virtual void addVariable(variable_t variable, bool negated) override;
 
@@ -31,7 +31,7 @@ namespace logic
 		virtual const_iterator end() const override;
 
 	private:
-		const IQbfInstance &instance_;
+		const IQbfInstance *instance_;
 		std::unordered_set<variable_t> variables_;
 		std::unordered_set<variable_t> negated_;
 
