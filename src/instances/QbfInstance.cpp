@@ -70,6 +70,61 @@ namespace logic
 		setQuantifierLevelInternal(variable, level);
 	}
 
+	void QbfInstance::remove(const unordered_set<variable_t> &toRemove)
+	{
+		throwIfCompleted();
+
+		// erase unused variables
+		for(variable_t var : toRemove)
+		{
+			unquantified_.erase(var);
+
+			auto it = quantifierLevels_.find(var);
+			short level = -1;
+			if(it != quantifierLevels_.end())
+			{
+				level = it->second;
+				quantifierLevels_.erase(it);
+			}
+
+			if(level != -1)
+				variables_[level].erase(var);
+		}
+
+		// compress the instance
+		unsigned int substract = 0;
+		num_vector adjustment;
+		adjustment.reserve(variableCount_ + 1);
+		adjustment.push_back(-substract);
+		for(variable_t var = 1; var <= variableCount_; ++var)
+		{
+			adjustment.push_back(-substract);
+			if(unquantified_.count(var) || quantifierLevels_.count(var))
+			{
+				if(!substract) continue;
+
+				auto it = quantifierLevels_.find(var);
+				if(it != quantifierLevels_.end())
+				{
+					quantifierLevels_[var - substract] = it->second;
+					quantifierLevels_.erase(var);
+					continue;
+				}
+	
+				if(unquantified_.erase(var))
+					unquantified_.insert(var - substract);
+				continue;
+			}
+
+			++substract;
+		}
+		variableCount_ -= substract;
+
+		// adjust clauses
+		for(IQbfClause *clause : clauses_)
+			clause->adjustVariables(adjustment);
+	}
+
 	IQbfClause &QbfInstance::addClause()
 	{
 		throwIfCompleted();

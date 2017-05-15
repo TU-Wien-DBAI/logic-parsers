@@ -26,6 +26,23 @@ namespace logic
 			negated_.insert(variable);
 	}
 
+	void QbfClause::adjustVariables(const num_vector &adjustment)
+	{
+		variable_vector temp;
+		temp.reserve(variables_.size());
+		for(variable_t var : variables_)
+			temp.push_back(var + adjustment[var]);
+		variables_.clear();
+		variables_.insert(temp.begin(), temp.end());
+		temp.clear();
+
+		temp.reserve(negated_.size());
+		for(variable_t var : negated_)
+			temp.push_back(var + adjustment[var]);
+		negated_.clear();
+		negated_.insert(temp.begin(), temp.end());
+	}
+
 	const IQbfInstance &QbfClause::instance() const
 	{
 		return *instance_;

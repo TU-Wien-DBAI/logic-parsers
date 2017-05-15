@@ -24,6 +24,8 @@ namespace logic
 		virtual void setCnf() = 0;
 		virtual void setDnf() = 0;
 		virtual void setVariableCount(variable_t variableCount) = 0;
+		virtual void remove(
+				const std::unordered_set<variable_t> &toRemove) = 0;
 		virtual void setQuantifierLevel(variable_t variable, short level) = 0;
 		virtual IQbfClause &addClause() = 0;
 

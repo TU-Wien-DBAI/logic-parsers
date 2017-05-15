@@ -24,6 +24,7 @@ namespace logic
 		virtual void setInstance(const IQbfInstance &instance) = 0;
 		virtual void addVariable(variable_t variable) = 0;
 		virtual void addVariable(variable_t variable, bool negated) = 0;
+		virtual void adjustVariables(const num_vector &adjustment) = 0;
 
 		virtual const IQbfInstance &instance() const = 0;
 		

@@ -24,6 +24,7 @@ namespace logic
 		void setDnf() override;
 		void setVariableCount(variable_t variableCount) override;
 		void setQuantifierLevel(variable_t variable, short level) override; 
+		void remove(const std::unordered_set<variable_t> &toRemove) override; 
 		IQbfClause &addClause() override;
 
 		// Instance methods

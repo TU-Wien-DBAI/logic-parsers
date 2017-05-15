@@ -17,6 +17,7 @@ namespace logic
 		virtual void setInstance(const IQbfInstance &instance) override;
 		virtual void addVariable(variable_t variable) override;
 		virtual void addVariable(variable_t variable, bool negated) override;
+		virtual void adjustVariables(const num_vector &adjustment) override;
 
 		virtual const IQbfInstance &instance() const override;
 		

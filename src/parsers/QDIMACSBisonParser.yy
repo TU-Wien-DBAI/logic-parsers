@@ -32,15 +32,10 @@
  * types is defined; we need to define all the types used in the union here */
 %code requires
 {
+	#include <logic/helpers>
 	#include <string>
 	#include <vector>
 	#include <cstdint>
-
-	namespace logic
-	{
-		typedef std::int32_t num_t;
-		typedef std::vector<std::int32_t> num_vector;
-	}
 }
 
 /* define the union of types that can be used for tokens in the grammer
@@ -49,6 +44,8 @@
 {
 	std::string *string;
 	logic::num_t number;
+	logic::id_t unumber;
+	logic::id_vector *unumberlist;
 	logic::num_vector *numberlist;
 	IQbfClause *clause;
 }
@@ -74,10 +71,10 @@
 	{
 		namespace
 		{ 
-			num_t clauseCount_ = 0;
-			num_t quantifierNesting_ = -1;
-			num_t variableCount_ = 0;
-			std::unordered_set<num_t> unseenVariables_(0);
+			int clauseCount_ = 0;
+			num_t quantifierNesting_ = 0;
+			id_t variableCount_ = 0;
+			std::unordered_set<id_t> unseenVariables_(0);
 		}
 	}
 }
@@ -85,12 +82,14 @@
 /* declarations of terminal symbols (tokens), and their types */
 %token PROBLEM EXISTS FORALL NEG CNF DNF ZERO EOL
 %token<string> COMMENT
-%token<number> NUMBER
+%token<unumber> NUMBER
 
 /* specify the types of non-terminal symbols, where needed */
 %type<string> comment
-%type<number> variable literal varcount clausecnt
-%type<numberlist> qvars literals
+%type<unumber> variable varcount clausecnt
+%type<number> literal
+%type<unumberlist> qvars
+%type<numberlist> literals
 %type<clause> clause
 
 /* set the destructor code for certain types and/or symbols */
@@ -116,11 +115,12 @@ qdimacs	 :	comments cnf quantse clauses
 				if(!unseenVariables_.empty())
 				{
 					std::string message("unused variables: ");
-					for(num_t variable : unseenVariables_)
+					for(id_t variable : unseenVariables_)
 						message += "'" + std::to_string(variable) + "' ";
 					error(yyla.location, message);
-					YYERROR;
+					//YYERROR; // ignore this
 				}
+				builder.remove(unseenVariables_);
 			}
 		 |  comments dnf quantsf clauses
 		 	{
@@ -137,11 +137,12 @@ qdimacs	 :	comments cnf quantse clauses
 				if(!unseenVariables_.empty())
 				{
 					std::string message("unused variables: ");
-					for(num_t variable : unseenVariables_)
+					for(id_t variable : unseenVariables_)
 						message += "'" + std::to_string(variable) + "' ";
 					error(yyla.location, message);
-					YYERROR;
+					//YYERROR; // ignore this
 				}
+				builder.remove(unseenVariables_);
 			}
 		 ;
 
@@ -161,7 +162,7 @@ cnf      :	PROBLEM CNF varcount clausecnt EOL
 				clauseCount_ = $4;
 				unseenVariables_.reserve(variableCount_);
 
-				for(num_t var = 1; var <= variableCount_; ++var)
+				for(id_t var = 1; var <= variableCount_; ++var)
 					unseenVariables_.insert(var);
 			}
 		 ;
@@ -175,7 +176,7 @@ dnf		 :	PROBLEM DNF varcount clausecnt EOL
 				clauseCount_ = $4;
 				unseenVariables_.reserve(variableCount_);
 
-				for(num_t var = 1; var <= variableCount_; ++var)
+				for(id_t var = 1; var <= variableCount_; ++var)
 					unseenVariables_.insert(var);
 			}
 	     ;
@@ -212,21 +213,22 @@ quantse  :	quantsf exists
 
 exists   :  EXISTS qvars ZERO EOL
 		 	{
-				++quantifierNesting_;
-			
 				for(auto variable : *$2)
 					builder.setQuantifierLevel(variable, quantifierNesting_);
 				delete $2;
+
+				++quantifierNesting_;
 			}
 		 ;
 
 forall   :  FORALL qvars ZERO EOL
 		 	{
-				++quantifierNesting_;
 			
 				for(auto variable : *$2)
 					builder.setQuantifierLevel(variable, quantifierNesting_);
 				delete $2;
+
+				++quantifierNesting_;
 			}
 		 ;
 
@@ -237,7 +239,7 @@ qvars    :  qvars variable
 			}
 		 |  variable
 		 	{
-				$$ = new num_vector({ $1 });
+				$$ = new id_vector({ $1 });
 			}
 		 ;
 
