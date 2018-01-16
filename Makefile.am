@@ -157,4 +157,5 @@ CLEANFILES += $(BUILT_SOURCES)
 ############################
 
 # tell automake to recursively go into the test directory
-SUBDIRS = tests
+SUBDIRS = tests \
+	  docs
