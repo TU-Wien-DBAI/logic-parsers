@@ -8,7 +8,7 @@
 
 /* the constructor of the generated parser class takes these arguments
  * and stores them in equivalently named private member fields */
-%parse-param {QDIMACSLexer &lexer} {IQbfInstanceBuilder &builder}
+%parse-param {QDIMACSLexer &lexer} {ProceduralQbfInstanceBuilder &builder}
 
 /* define some parser name settings */
 %define parser_class_name {QDIMACSBisonParser}
@@ -47,7 +47,7 @@
 	logic::id_t unumber;
 	logic::id_vector *unumberlist;
 	logic::num_vector *numberlist;
-	IQbfClause *clause;
+        logic::ProceduralQbfClauseBuilder *clause;
 }
 
 /* include this code in the generated header file after the above union;
@@ -156,7 +156,7 @@ comment  :  COMMENT EOL
 cnf      :	PROBLEM CNF varcount clausecnt EOL
 		    {
 				builder.setCnf();
-				builder.setVariableCount($3);
+				// builder.setVariableCount($3);
 
 				variableCount_ = $3;
 				clauseCount_ = $4;
@@ -170,7 +170,7 @@ cnf      :	PROBLEM CNF varcount clausecnt EOL
 dnf		 :	PROBLEM DNF varcount clausecnt EOL
 		    {
 				builder.setDnf();
-				builder.setVariableCount($3);
+				// builder.setVariableCount($3);
 
 				variableCount_ = $3;
 				clauseCount_ = $4;
@@ -264,9 +264,9 @@ clause   :  literals ZERO EOL
 
 				for(auto literal : *$1)
 					if(literal < 0)
-						$$->addVariable(-literal, true);
+                                            $$->addLiteral(-literal, logic::POLARITY_NEGATIVE);
 					else
-						$$->addVariable(literal);
+                                            $$->addLiteral(literal, logic::POLARITY_POSITIVE);
 
 				delete $1;
 			}

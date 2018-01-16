@@ -31,6 +31,11 @@ namespace logic
 		virtual const_iterator begin() const override;
 		virtual const_iterator end() const override;
 
+                // new methods
+                const_literal_iterator beginLiterals() const;
+                const_literal_iterator endLiterals() const;
+                size_t size() const;
+
 	private:
 		const IQbfInstance *instance_;
 		std::unordered_set<variable_t> variables_;

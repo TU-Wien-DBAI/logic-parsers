@@ -5,7 +5,7 @@
 
 namespace logic
 {
-	using std::vector;
+using std::vector;
 
 	QbfClause::~QbfClause() { }
 
@@ -58,47 +58,62 @@ namespace logic
 		return negated_.find(variable) != negated_.end();
 	}
 
-	bool QbfClause::checkSatisfaction(
-			const variable_vector &trueVariables,
-			const variable_vector &falseVariables) const
-	{
-		if(instance_->isCnf())
-		{
-			for(const variable_t variable : falseVariables)
-				if(isNegated(variable))
-					return true;
+bool QbfClause::checkSatisfaction(
+                        const variable_vector &trueVariables,
+                        const variable_vector &falseVariables) const
+        {
+                if(instance_->isCnf())
+                {
+                        for(const variable_t variable : falseVariables)
+                                if(isNegated(variable))
+                                        return true;
 
-			for(const variable_t variable : trueVariables)
-				if(contains(variable) && !isNegated(variable))
-					return true;
+                        for(const variable_t variable : trueVariables)
+                                if(contains(variable) && !isNegated(variable))
+                                        return true;
 
-			return false;
-		}
-		else
-		{
-			for(const variable_t variable : trueVariables)
-				if(isNegated(variable))
-					return false;
+                        return false;
+                }
+                else
+                {
+                        for(const variable_t variable : trueVariables)
+                                if(isNegated(variable))
+                                        return false;
 
-			for(const variable_t variable : falseVariables)
-				if(contains(variable) && !isNegated(variable))
-					return false;
+                        for(const variable_t variable : falseVariables)
+                                if(contains(variable) && !isNegated(variable))
+                                        return false;
 
-			return true;
-		}
-	}
+return true;
+                }
+        }
 
-	IQbfClause::const_iterator QbfClause::begin() const
-	{
-		return IQbfClause::const_iterator(new ConstEnum(
-					variables_.begin(),
-					variables_.end()));
-	}
+        IQbfClause::const_iterator QbfClause::begin() const
+        {
+                return IQbfClause::const_iterator(new ConstEnum(
+                                        variables_.begin(),
+                                        variables_.end()));
+        }
 
-	IQbfClause::const_iterator QbfClause::end() const
-	{
-		return IQbfClause::const_iterator(new ConstEnum(
-					variables_.end()));
-	}
+        IQbfClause::const_iterator QbfClause::end() const
+        {
+                return IQbfClause::const_iterator(new ConstEnum(
+                                        variables_.end()));
+        }
+
+IQbfClause::const_literal_iterator QbfClause::beginLiterals() const
+    {
+        throw "Unsupported operation: beginLiterals()";
+    }
+
+IQbfClause::const_literal_iterator QbfClause::endLiterals() const
+    {
+        throw "Unsupported operation: endLiterals()";
+    }
+
+    size_t QbfClause::size(void) const
+    {
+        throw "Unsupported operation: size()";
+    }
 
 } // namespace logic

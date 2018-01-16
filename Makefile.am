@@ -31,7 +31,7 @@ AM_CPPFLAGS = \
 EXTRA_DIST =
 CLEANFILES =
 BUILT_SOURCES = 
-				
+
 ############################
 # LIBRARIES TO BUILD:	   #
 ############################
@@ -72,10 +72,14 @@ liblogicparsers_la_include_HEADERS = \
 	include/logic/IQbfClauseFactory.hpp \
 	include/logic/IQbfClause.hpp \
 	include/logic/IQbfInstanceFactory.hpp \
-	include/logic/IQbfInstanceBuilder.hpp \
 	include/logic/IQbfInstance.hpp \
 	include/logic/IQDIMACSParserFactory.hpp \
 	include/logic/IQDIMACSParser.hpp \
+	include/logic/QbfLiteral.hpp \
+	include/logic/types.hpp \
+	include/logic/ProceduralQbfInstanceBuilder.hpp \
+	include/logic/CompactQbfInstanceFactory.hpp \
+	include/logic/CompactQbfInstance.hpp \
 	\
 	include/logic/parser.hpp \
 	\
@@ -91,10 +95,15 @@ liblogicparsers_la_SOURCES = \
 	\
 	src/parser.cpp \
 	\
-	src/instances/QbfInstance.cpp \
-	src/instances/QbfInstance.hpp \
+	src/instances/CompactQbfInstance.cpp \
+	src/instances/CompactQbfClause.cpp \
 	src/instances/QbfClause.cpp \
 	src/instances/QbfClause.hpp \
+	src/instances/QbfLiteral.cpp \
+	\
+	src/instances/ProceduralQbfInstanceBuilder.cpp \
+	\
+	src/CompactQbfInstanceFactory.cpp \
 	\
 	src/parsers/QDIMACSBisonParser.hpp \
 	src/parsers/QDIMACSBisonParser.yy \

@@ -24,7 +24,7 @@ namespace logic
 
 	IQbfInstance *QDIMACSParser::parse(istream *in, ostream *out)
 	{
-		IQbfInstanceBuilder *result = parser::qbfInstanceBuilder();
+		ProceduralQbfInstanceBuilder *result = parser::qbfInstanceBuilder();
 
 		//TODO: proper error handling
 		//if(!result) return nullptr;

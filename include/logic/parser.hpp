@@ -9,6 +9,7 @@
 #include <logic/IQbfInstance.hpp>
 #include <logic/IQbfClauseFactory.hpp>
 #include <logic/IQbfClause.hpp>
+#include <logic/ProceduralQbfInstanceBuilder.hpp>
 
 namespace logic
 {
@@ -22,7 +23,7 @@ namespace logic
 
 		static IQDIMACSParser *qdimacsParser();
 
-		static IQbfInstanceBuilder *qbfInstanceBuilder();
+		static ProceduralQbfInstanceBuilder *qbfInstanceBuilder();
 		
 		static IQbfClause *qbfClause();
 		

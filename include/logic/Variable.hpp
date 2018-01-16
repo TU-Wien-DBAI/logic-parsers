@@ -4,12 +4,12 @@
 #include <logic/global>
 
 #include <logic/Id.hpp>
+#include <logic/types.hpp>
 
 #include <vector>
 
 namespace logic
 {
-	typedef id_t variable_t;
 	typedef std::vector<variable_t> variable_vector;
 
 	struct Variable

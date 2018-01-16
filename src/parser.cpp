@@ -1,9 +1,10 @@
 #include "preamble.h"
 #include <logic/parser.hpp>
 
+#include <logic/ProceduralQbfInstanceBuilder.hpp>
+
 #include "parsers/QDIMACSParser.hpp"
 #include "instances/QbfClause.hpp"
-#include "instances/QbfInstance.hpp"
 
 #include <memory>
 #include <stdexcept>
@@ -52,11 +53,11 @@ namespace logic
 		return new QbfClause();
 	}
 
-	IQbfInstanceBuilder *parser::qbfInstanceBuilder()
+    ProceduralQbfInstanceBuilder * parser::qbfInstanceBuilder()
 	{
 		if(qbfInstanceFactory_)
 			return qbfInstanceFactory_->create();
-		return new QbfInstance();
+		return new ProceduralQbfInstanceBuilder();
 	}
 
 } // namespace logic

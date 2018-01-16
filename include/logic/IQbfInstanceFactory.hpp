@@ -3,7 +3,7 @@
 
 #include <logic/global>
 
-#include <logic/IQbfInstanceBuilder.hpp>
+#include <logic/ProceduralQbfInstanceBuilder.hpp>
 
 namespace logic
 {
@@ -15,7 +15,7 @@ namespace logic
 	public:
 		virtual ~IQbfInstanceFactory() = 0;
 
-		virtual IQbfInstanceBuilder *create() const = 0;
+		virtual ProceduralQbfInstanceBuilder * create() const = 0;
 
 	}; // class IQbfInstanceFactory
 

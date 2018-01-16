@@ -32,7 +32,7 @@ namespace logic
 		virtual short quantifierLevel(variable_t variable) const = 0;
 		virtual short innermostQuantifierLevel() const = 0;
 		virtual const std::unordered_set<variable_t> &variables(
-				short level) const = 0;
+				unsigned short level) const = 0;
 		virtual variable_t variableCount() const = 0;
 		virtual bool isCnf() const = 0;
 		virtual bool isDnf() const = 0;
