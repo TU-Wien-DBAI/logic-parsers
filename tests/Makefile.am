@@ -95,12 +95,12 @@ libgtest_main_la_LIBADD = libgtest.la
 # need to be added to the EXTRA_DIST files, to be included distributions.
 MOCK_FILES =
 
-# To all tests, link the library that we want to test (libqbf2asp.la), and all
+# To all tests, link the library that we want to test (liblogicparsers.la), and all
 # the test libraries we want to use for writing unit tests (see above section).
-LDADD += ../libqbf2asp.la libgtest.la libgtest_main.la
+LDADD += ../liblogicparsers.la libgtest.la libgtest_main.la
 
 # tell automake which test binaries to build
-check_PROGRAMS =
+check_PROGRAMS = tests
 
 # tell automake that for each program listed in PROGRAMS above, if no SOURCES
 # are given it should try and build it from the single source file <prog>.cpp,
