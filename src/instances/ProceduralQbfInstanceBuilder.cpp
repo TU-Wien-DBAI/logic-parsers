@@ -113,11 +113,6 @@ namespace logic
         m_literals.insert(QbfLiteral(variable, polarity));
     }
 
-    ///
-    /// Returns the current clause constructed by this builder.
-    ///
-    /// The caller is responsible for freeing the returned clause.
-    ///
     std::set<QbfLiteral> * ProceduralQbfClauseBuilder::toClause() const
     {
         return new set<QbfLiteral>(m_literals);
