@@ -42,20 +42,13 @@ namespace logic
 
     bool CompactQbfInstance::isExistential(variable_t variable) const
     {
-        // if the quantifier level is even, and we are a cnf, return true
-        // if the quantifier level is odd, and we are a dnf, return true
-        return quantifierLevel(variable) % 2 == 0
-            ? ! (m_qbftype == QBF_DNF)
-            : (m_qbftype == QBF_DNF);
+        int parity = (innermostQuantifierLevel() + quantifierLevel(variable)) % 2;
+        return (m_qbftype == QBF_CNF) ? parity == 0 : parity == 1;
     }
 
     bool CompactQbfInstance::isUniversal(variable_t variable) const
     {
-        // if the quantifier level is odd, and we are a cnf, return true
-        // if the quantifier level is even, and we are a dnf, return true
-        return quantifierLevel(variable) % 2 == 0
-            ? (m_qbftype == QBF_DNF)
-            : !(m_qbftype == QBF_DNF);
+        return !isExistential(variable);
     }
 
     short CompactQbfInstance::quantifierLevel(variable_t variable) const
