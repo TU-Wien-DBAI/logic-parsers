@@ -132,7 +132,7 @@ namespace logic
 
     const IQbfClause & CompactQbfInstance::clause(clause_t clause) const
     {
-        throw "Unsupported operation: clause(clause_t)";
+        return *m_clauses[clause - m_numberVariables - 1];
     }
 
 } // namespace logic
