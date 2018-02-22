@@ -73,6 +73,7 @@ liblogicparsers_la_include_HEADERS = \
 	include/logic/IQbfClause.hpp \
 	include/logic/IQbfInstanceFactory.hpp \
 	include/logic/IQbfInstance.hpp \
+	include/logic/IQbfInstanceBuilder.hpp \
 	include/logic/IQDIMACSParserFactory.hpp \
 	include/logic/IQDIMACSParser.hpp \
 	include/logic/QbfLiteral.hpp \
